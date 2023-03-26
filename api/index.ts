@@ -37,11 +37,11 @@ mongoose
     console.error('Error connecting to MongoDB:', error);
   });
 
-app.get('/test', ({ req, res }: { req: any; res: any }) => {
+app.get('/test', (req: Request, res: Response) => {
   res.json('test ok');
 });
 
-app.post('/register', async ({ req, res }: { req: any; res: any }) => {
+app.post('/register', async (req: Request, res: Response) => {
   console.log(req.body);
   const { name, email, password } = req.body;
   try {
@@ -57,7 +57,7 @@ app.post('/register', async ({ req, res }: { req: any; res: any }) => {
   }
 });
 
-app.post('/login', async (req, res) => {
+app.post('/login', async (req: Request, res: Response) => {
   const { email, password } = req?.body;
 
   const userDoc = await User.findOne({ email });
