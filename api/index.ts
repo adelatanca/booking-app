@@ -2,8 +2,10 @@ import express, { Response, Request } from 'express';
 import mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
 dotenv.config({ path: __dirname + '/.env' });
-
 import cors from 'cors';
+
+mongoose.set('strictQuery', false);
+
 const bodyParser = require('body-parser');
 const User = require('./models/User.ts');
 const Place = require('./models/Places.ts');
