@@ -160,7 +160,6 @@ const PlacePage = () => {
             </div>
 
             <BookingWidget place={place} />
-            <button className='primary mt-4'>Book this place</button>
           </div>
         </div>
       </div>

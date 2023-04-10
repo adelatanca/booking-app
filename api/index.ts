@@ -9,6 +9,7 @@ mongoose.set('strictQuery', false);
 const bodyParser = require('body-parser');
 const User = require('./models/User.ts');
 const Place = require('./models/Places.ts');
+const Booking = require('./models/Booking.ts');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const MONGO_URL = process.env.MONGO_URL;
@@ -228,8 +229,29 @@ app.put('/places', async (req: Request, res: Response) => {
   });
 });
 
-app.get('/places', async (req, res) => {
+app.get('/places', async (req: Request, res: Response) => {
   res.json(await Place.find());
+});
+
+app.post('/bookings', (req: Request, res: Response) => {
+  const { place, checkIn, checkOut, numberOfGuests, name, phone, price } =
+    req.body;
+
+  Booking.create({
+    place,
+    checkIn,
+    checkOut,
+    numberOfGuests,
+    name,
+    phone,
+    price,
+  })
+    .then((doc) => {
+      res.json(doc);
+    })
+    .catch((err) => {
+      throw err;
+    });
 });
 
 app.listen(4000);
