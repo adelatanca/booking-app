@@ -16,3 +16,5 @@ export interface PlacesType {
   checkOut: Number;
   maxGuests: Number;
 }
+
+export const baseURL = 'http://localhost:4000';
