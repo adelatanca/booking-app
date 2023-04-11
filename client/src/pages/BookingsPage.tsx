@@ -24,17 +24,14 @@ const BookingsPage = () => {
     });
   }, []);
 
-  useEffect(() => {
-    bookings.map((booking, key) => console.log('PLACE -> ', booking));
-  });
-
   return (
     <div>
       <AccountNav />
       <div>
         {bookings?.length > 0 &&
-          bookings.map((booking) => (
+          bookings.map((booking, key) => (
             <Link
+              key={`link-${key}`}
               to={`/account/bookings/${booking._id}`}
               className='flex gap-4 bg-gray-200 rounded-2xl overflow-hidden'>
               <div className='w-48'>

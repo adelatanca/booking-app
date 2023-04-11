@@ -24,11 +24,12 @@ const PlacesFormPage = () => {
     if (!id) {
       return;
     }
+    // add type for response
     axios.get('/places/' + id).then((response) => {
       const { data } = response;
       setTitle(data.title);
       setAddress(data.address);
-      setAddedPhotos(data.addedPhotos);
+      setAddedPhotos(data.photos);
       setDescription(data.description);
       setPerks(data.perks);
       setExtraInfo(data.extraInfo);
@@ -53,6 +54,8 @@ const PlacesFormPage = () => {
       maxGuests,
       price,
     };
+
+    console.log('addedp ph ', addedPhotos);
 
     if (id) {
       await axios.put('/places', {
