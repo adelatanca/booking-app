@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { PlacesType } from '../assets/types';
+import PlaceImage from '../components/PlaceImage';
 
 const PlacesPage = () => {
   const [places, setPlaces] = useState<PlacesType[]>([]);
@@ -45,13 +46,7 @@ const PlacesPage = () => {
               to={'/account/places/' + place._id}
               className='mb-4 flex cursor-pointer gap-4 bg-gray-100 p-4 rounded-2xl'>
               <div className='flex w-32 h-32 bg-gray-300 grow-0 shrink-0'>
-                {place.photos.length > 0 && (
-                  <img
-                    className='object-cover'
-                    src={'http://localhost:4000/uploads/' + place.photos[0]}
-                    alt={'photo'}
-                  />
-                )}
+                <PlaceImage place={place} />
               </div>
               <div className='grow-0 shrink'>
                 <h2 className='text-xl'>{place.title} </h2>

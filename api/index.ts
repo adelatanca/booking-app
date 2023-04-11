@@ -15,7 +15,7 @@ export interface UserDataProps {
 
 const bodyParser = require('body-parser');
 const User = require('./models/User.ts');
-const Place = require('./models/Places.ts');
+const Place = require('./models/Place.ts');
 const Booking = require('./models/Booking.ts');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -280,7 +280,11 @@ app.post('/bookings', async (req: Request, res: Response) => {
 app.get('/bookings', async (req: Request, res: Response) => {
   // because they are private, we need jwt verification
   const userData = (await getUserDataFromRequest(req)) as UserDataProps;
-  res.json(await Booking.find({ user: userData.id }));
+  const bookings = await Booking.find({ user: userData.id })
+    .populate('place')
+    .lean();
+
+  res.json(bookings);
 });
 
 app.listen(4000);
