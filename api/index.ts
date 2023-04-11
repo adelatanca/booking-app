@@ -6,6 +6,13 @@ import cors from 'cors';
 
 mongoose.set('strictQuery', false);
 
+export interface UserDataProps {
+  email: String;
+  id: String;
+  name: String;
+  iat: Number;
+}
+
 const bodyParser = require('body-parser');
 const User = require('./models/User.ts');
 const Place = require('./models/Places.ts');
@@ -47,6 +54,20 @@ mongoose
   .catch((error) => {
     console.error('Error connecting to MongoDB:', error);
   });
+
+const getUserDataFromRequest = (req) => {
+  return new Promise((resolve, reject) => {
+    jwt.verify(
+      req.cookies.token,
+      jwtSecret,
+      {},
+      async (err, userData: UserDataProps) => {
+        if (err) throw err;
+        resolve(userData);
+      }
+    );
+  });
+};
 
 app.get('/test', (req: Request, res: Response) => {
   res.json('test ok');
@@ -233,7 +254,8 @@ app.get('/places', async (req: Request, res: Response) => {
   res.json(await Place.find());
 });
 
-app.post('/bookings', (req: Request, res: Response) => {
+app.post('/bookings', async (req: Request, res: Response) => {
+  const userData = (await getUserDataFromRequest(req)) as UserDataProps;
   const { place, checkIn, checkOut, numberOfGuests, name, phone, price } =
     req.body;
 
@@ -245,6 +267,7 @@ app.post('/bookings', (req: Request, res: Response) => {
     name,
     phone,
     price,
+    user: userData.id,
   })
     .then((doc) => {
       res.json(doc);
@@ -252,6 +275,12 @@ app.post('/bookings', (req: Request, res: Response) => {
     .catch((err) => {
       throw err;
     });
+});
+
+app.get('/bookings', async (req: Request, res: Response) => {
+  // because they are private, we need jwt verification
+  const userData = (await getUserDataFromRequest(req)) as UserDataProps;
+  res.json(await Booking.find({ user: userData.id }));
 });
 
 app.listen(4000);

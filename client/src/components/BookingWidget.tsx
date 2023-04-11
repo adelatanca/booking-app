@@ -1,8 +1,10 @@
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { PlaceProps } from '../pages/IndexPage';
 import { differenceInCalendarDays } from 'date-fns';
 import axios from 'axios';
 import { Navigate } from 'react-router-dom';
+import { UserContext } from '../UserContext';
+import { UserContextType } from '../assets/types';
 
 const BookingWidget = ({ place }: { place: PlaceProps }) => {
   const [checkIn, setCheckIn] = useState('');
@@ -11,6 +13,14 @@ const BookingWidget = ({ place }: { place: PlaceProps }) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [redirect, setRedirect] = useState('');
+
+  const { user } = useContext(UserContext) as UserContextType;
+
+  useEffect(() => {
+    if (user) {
+      setName(user.name);
+    }
+  }, [user]);
 
   let numberOfNights = 0;
   if (checkIn && checkOut) {
@@ -31,7 +41,7 @@ const BookingWidget = ({ place }: { place: PlaceProps }) => {
       price: numberOfNights * place.price,
     });
     const bookingId = response.data._id;
-    setRedirect(`/accounts/bookings/${bookingId}`);
+    setRedirect(`/account/bookings/${bookingId}`);
   };
 
   if (redirect) {
