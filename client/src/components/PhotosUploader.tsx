@@ -10,10 +10,15 @@ export interface PhotosUploaderProps {
 const PhotosUploader = ({ addedPhotos, onChange }: PhotosUploaderProps) => {
   const [photoLink, setPhotoLink] = useState('');
   const [redirect, setRedirect] = useState('');
+  const [hasLink, setHasLink] = useState(true);
 
   const addPhotoByLink = async (ev: { preventDefault: () => void }) => {
     try {
       ev.preventDefault();
+      if (photoLink === '') {
+        setHasLink(false);
+        return;
+      }
       const { data: filename } = await axios.post('/upload-by-link', {
         link: photoLink,
       });
@@ -87,12 +92,18 @@ const PhotosUploader = ({ addedPhotos, onChange }: PhotosUploaderProps) => {
           type='text'
           placeholder='Add using a link ...jpg'
         />
+
         <button
           onClick={addPhotoByLink}
           className='bg-gray-200 px-4 rounded-2xl'>
           Add&nbsp;photo
         </button>
       </div>
+      {!hasLink && (
+        <div className='text-red-500 font-bold'>
+          Upload an image link to continue
+        </div>
+      )}
 
       <div className='mt-2 gap-2 grid grid-cols-3 md:grid-cols-3 lg:grid-cols-6'>
         {addedPhotos &&
