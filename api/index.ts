@@ -69,9 +69,6 @@ const getUserDataFromRequest = (req) => {
   });
 };
 
-app.get('/test', (req: Request, res: Response) => {
-  res.json('test ok');
-});
 
 app.post('/register', async (req: Request, res: Response) => {
   const { name, email, password } = req.body;

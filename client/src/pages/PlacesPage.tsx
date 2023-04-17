@@ -20,7 +20,7 @@ const PlacesPage = () => {
       <div className='text-center'>
         <br />
         <Link
-          className='inline-flex gap-1 bg-primary text-white py-2 px-6 rounded-full'
+          className='shadow-xl inline-flex gap-1 bg-primary text-white py-2 px-6 rounded-full'
           to={'/account/places/new'}>
           <svg
             xmlns='http://www.w3.org/2000/svg'
@@ -44,7 +44,7 @@ const PlacesPage = () => {
             <Link
               key={`${key}-${place._id}`}
               to={'/account/places/' + place._id}
-              className='mb-4 flex cursor-pointer gap-4 bg-gray-100 p-4 rounded-2xl'>
+              className='shadow-xl mb-4 flex cursor-pointer gap-4 bg-gray-100 p-4 rounded-2xl'>
               <div className='flex w-32 h-32 bg-gray-300 grow-0 shrink-0'>
                 <PlaceImage place={place} />
               </div>

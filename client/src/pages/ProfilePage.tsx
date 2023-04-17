@@ -41,7 +41,7 @@ const ProfilePage = () => {
               Logged in as {user.name} ({user.email})<br />
               <button
                 onClick={() => logout()}
-                className='primary max-w-sm mt-2'>
+                className='primary max-w-sm mt-2 shadow-xl'>
                 Logout
               </button>
             </div>

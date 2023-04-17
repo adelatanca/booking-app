@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import Image from '../Image';
 
 export interface PlaceProps {
@@ -18,6 +18,7 @@ export interface PlaceProps {
 
 export default function IndexPage() {
   const [places, setPlaces] = useState<PlaceProps[]>([]);
+
   useEffect(() => {
     axios.get('/places').then((response) => {
       setPlaces(response.data);
@@ -29,7 +30,7 @@ export default function IndexPage() {
       {places.length > 0 &&
         places.map((place, key) => (
           <Link key={key + place._id} to={'/place/' + place._id}>
-            <div className='bg-gray-500 mb-2 rounded-2xl flex'>
+            <div className='shadow-xl bg-gray-500 mb-2 rounded-2xl flex'>
               {place.photos?.[0] && (
                 <Image
                   className='rounded-2xl object-cover aspect-square'

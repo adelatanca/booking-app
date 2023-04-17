@@ -11,7 +11,7 @@ const BookingWidget = ({ place }: { place: PlaceProps }) => {
   const [checkOut, setCheckOut] = useState('');
   const [numberOfGuests, setNumberOfGuests] = useState(1);
   const [name, setName] = useState('');
-  const [phone, setPhone] = useState('');
+  const [phone, setPhone] = useState<Number | any>();
   const [redirect, setRedirect] = useState('');
 
   const { user } = useContext(UserContext) as UserContextType;
@@ -87,9 +87,9 @@ const BookingWidget = ({ place }: { place: PlaceProps }) => {
             />
             <label>Phone number:</label>
             <input
-              type='tel'
+              type='number'
               value={phone}
-              onChange={(ev) => setPhone(ev.target.value)}
+              onChange={(ev) => setPhone(Number(ev.target.value))}
             />
           </div>
         )}
