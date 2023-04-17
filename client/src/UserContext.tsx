@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { createContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
 
 export const UserContext = createContext({});
 
@@ -32,8 +31,7 @@ export const UserContextProvider = ({
   }, []);
 
   return (
-    <UserContext.Provider
-      value={{ user, setUser, ready, places, setPlaces, bookings }}>
+    <UserContext.Provider value={{ user, setUser, ready, places, bookings }}>
       {children}
     </UserContext.Provider>
   );

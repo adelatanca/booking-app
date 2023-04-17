@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { TextInput } from '../stories/TextInput/TextInput';
 import Perks from '../components/Perks';
 import PhotosUploader from '../components/PhotosUploader';
@@ -7,8 +7,11 @@ import AccountNav from '../components/AccountNav';
 import { Navigate, useParams } from 'react-router-dom';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import { UserContext } from '../UserContext';
+import { UserContextType } from '../assets/types';
 
 const PlacesFormPage = () => {
+  const { places } = useContext(UserContext) as UserContextType;
   const { id } = useParams();
   const [title, setTitle] = useState('');
   const [address, setAddress] = useState('');
@@ -32,6 +35,14 @@ const PlacesFormPage = () => {
     checkOut: '',
     maxGuests: '',
     price: '',
+  });
+
+  useEffect(() => {
+    // here you can change the initialValues object mapping and comparing id
+    if (places)
+      places.map((place) => {
+        if (place._id === id) console.log(place._id);
+      });
   });
 
   useEffect(() => {

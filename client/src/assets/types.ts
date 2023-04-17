@@ -1,7 +1,11 @@
+import { BookingProps } from '../pages/BookingsPage';
+
 export interface UserContextType {
   user: { name: ''; email: '' };
   ready: boolean;
   setUser: React.Dispatch<React.SetStateAction<string>>;
+  places: PlacesType[];
+  bookings: BookingProps[];
 }
 
 export interface PlacesType {
