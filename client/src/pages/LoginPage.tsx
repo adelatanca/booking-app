@@ -8,7 +8,7 @@ import 'react-toastify/dist/ReactToastify.css';
 const LoginPage = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [redirect, setRedirect] = useState(false);
+  const [redirect, setRedirect] = useState('');
   const { user, setUser } = useContext<any>(UserContext);
 
   const notify = () => toast('Login Successful');
@@ -20,16 +20,16 @@ const LoginPage = () => {
       setUser(data);
       notify();
       setTimeout(() => {
-        setRedirect(true);
+        setRedirect('/');
       }, 2000);
     } catch (e) {
       console.log(e);
-      alert('Login failed');
+      setRedirect(`/error`);
     }
   };
 
   if (redirect) {
-    return <Navigate to={'/'} />;
+    return <Navigate to={redirect} />;
   }
 
   return (
@@ -62,8 +62,8 @@ const LoginPage = () => {
             </Link>
           </div>
         </form>
+        <ToastContainer />
       </div>
-      <ToastContainer />
     </div>
   );
 };

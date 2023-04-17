@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { PlaceProps } from './IndexPage';
 import BookingWidget from '../components/BookingWidget';
 import PlaceGallery from '../components/PlaceGallery';
@@ -9,15 +9,29 @@ import AddressLink from '../components/AddressLink';
 const PlacePage = () => {
   const { id } = useParams();
   const [place, setPlace] = useState<PlaceProps>();
+  const [redirect, setRedirect] = useState('');
 
   useEffect(() => {
-    if (!id) return;
-    axios.get(`/places/${id}`).then((response) => {
-      setPlace(response.data);
-    });
+    const fetchPlace = async () => {
+      try {
+        const response = await axios.get(`/places/${id}`);
+        setPlace(response.data);
+      } catch (error) {
+        console.error('Error fetching place:', error);
+        // handle error and redirect
+        setRedirect('/error');
+      }
+    };
+    if (id) {
+      fetchPlace();
+    }
   }, [id]);
 
   if (!place) return <div></div>;
+
+  if (redirect) {
+    return <Navigate to={redirect} />;
+  }
 
   return (
     <div className='mt-4 bg-gray-100 -mx-8 px-8 pt-8'>

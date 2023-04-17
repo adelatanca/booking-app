@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { useState } from 'react';
+import { Navigate } from 'react-router-dom';
 
 export interface PhotosUploaderProps {
   addedPhotos?: string[];
@@ -8,36 +9,45 @@ export interface PhotosUploaderProps {
 
 const PhotosUploader = ({ addedPhotos, onChange }: PhotosUploaderProps) => {
   const [photoLink, setPhotoLink] = useState('');
+  const [redirect, setRedirect] = useState('');
 
   const addPhotoByLink = async (ev: { preventDefault: () => void }) => {
-    ev.preventDefault();
-    const { data: filename } = await axios.post('/upload-by-link', {
-      link: photoLink,
-    });
+    try {
+      ev.preventDefault();
+      const { data: filename } = await axios.post('/upload-by-link', {
+        link: photoLink,
+      });
 
-    onChange((prev: string[] = []) => {
-      return [...prev, filename];
-    });
+      onChange((prev: string[] = []) => {
+        return [...prev, filename];
+      });
 
-    setPhotoLink('');
+      setPhotoLink('');
+    } catch (error) {
+      setRedirect(`/error`);
+    }
   };
 
   const uploadPhoto = async (ev: any) => {
-    const files = ev.target.files;
-    const data = new FormData();
-    for (let i = 0; i < files.length; i++) {
-      data.append('photos', files[i]);
-    }
-    const response = await axios.post('/upload', data, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    const { data: filenames } = response;
+    try {
+      const files = ev.target.files;
+      const data = new FormData();
+      for (let i = 0; i < files.length; i++) {
+        data.append('photos', files[i]);
+      }
+      const response = await axios.post('/upload', data, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+      const { data: filenames } = response;
 
-    onChange((prev: string[] = []) => {
-      return [...prev, ...filenames];
-    });
+      onChange((prev: string[] = []) => {
+        return [...prev, ...filenames];
+      });
+    } catch (error) {
+      setRedirect(`/error`);
+    }
   };
 
   const removePhoto = ({
@@ -63,6 +73,10 @@ const PhotosUploader = ({ addedPhotos, onChange }: PhotosUploaderProps) => {
 
     onChange([filename, ...addedPhotos!.filter((photo) => photo !== filename)]);
   };
+
+  if (redirect) {
+    return <Navigate to={redirect} />;
+  }
 
   return (
     <>

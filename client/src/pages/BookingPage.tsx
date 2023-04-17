@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { Navigate, useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import AddressLink from '../components/AddressLink';
@@ -11,22 +11,34 @@ const BookingPage = () => {
   const { id } = useParams();
   const [booking, setBooking] = useState<BookingProps>();
   const windowSize = useWidth();
+  const [redirect, setRedirect] = useState('');
 
   useEffect(() => {
-    if (id) {
-      axios.get('/bookings').then((response) => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get('/bookings');
         const foundBooking = response.data.find(
-          ({ _id }: { _id: String }) => _id === id
+          ({ _id }: { _id: string }) => _id === id
         );
         if (foundBooking) {
           setBooking(foundBooking);
         }
-      });
+      } catch (error) {
+        setRedirect(`/error`);
+      }
+    };
+
+    if (id) {
+      fetchData();
     }
   }, [id]);
 
   if (!booking) {
     return <></>;
+  }
+
+  if (redirect) {
+    return <Navigate to={redirect} />;
   }
 
   return (

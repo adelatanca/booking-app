@@ -18,26 +18,30 @@ const PlacesFormPage = () => {
   const [checkOut, setCheckOut] = useState('');
   const [maxGuests, setMaxGuests] = useState<number | string>(1);
   const [price, setPrice] = useState<number | string>(100);
-  const [redirect, setRedirect] = useState(false);
+  const [redirect, setRedirect] = useState('');
 
   useEffect(() => {
     if (!id) {
       return;
     }
-    // add type for response
-    axios.get('/places/' + id).then((response) => {
-      const { data } = response;
-      setTitle(data.title);
-      setAddress(data.address);
-      setAddedPhotos(data.photos);
-      setDescription(data.description);
-      setPerks(data.perks);
-      setExtraInfo(data.extraInfo);
-      setCheckIn(data.checkIn);
-      setCheckOut(data.checkOut);
-      setMaxGuests(data.maxGuests);
-      setPrice(data.price);
-    });
+    try {
+      axios.get('/places/' + id).then((response) => {
+        const { data } = response;
+        setTitle(data.title);
+        setAddress(data.address);
+        setAddedPhotos(data.photos);
+        setDescription(data.description);
+        setPerks(data.perks);
+        setExtraInfo(data.extraInfo);
+        setCheckIn(data.checkIn);
+        setCheckOut(data.checkOut);
+        setMaxGuests(data.maxGuests);
+        setPrice(data.price);
+      });
+    } catch (error) {
+      console.error(error);
+      setRedirect('/error');
+    }
   }, [id]);
 
   const savePlace = async (ev: any) => {
@@ -55,22 +59,25 @@ const PlacesFormPage = () => {
       price,
     };
 
-    console.log('addedp ph ', addedPhotos);
-
-    if (id) {
-      await axios.put('/places', {
-        id,
-        ...placeData,
-      });
-      setRedirect(true);
-    } else {
-      await axios.post('/places', placeData);
-      setRedirect(true);
+    try {
+      if (id) {
+        await axios.put('/places', {
+          id,
+          ...placeData,
+        });
+        setRedirect('/account/places');
+      } else {
+        await axios.post('/places', placeData);
+        setRedirect('/account/places');
+      }
+    } catch (error) {
+      console.error(error);
+      setRedirect('/error');
     }
   };
 
   if (redirect) {
-    return <Navigate to={'/account/places'} />;
+    return <Navigate to={redirect} />;
   }
 
   return (

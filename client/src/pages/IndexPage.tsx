@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, Navigate, useLocation } from 'react-router-dom';
 import Image from '../Image';
 
 export interface PlaceProps {
@@ -18,12 +18,23 @@ export interface PlaceProps {
 
 export default function IndexPage() {
   const [places, setPlaces] = useState<PlaceProps[]>([]);
+  const [redirect, setRedirect] = useState('');
 
   useEffect(() => {
-    axios.get('/places').then((response) => {
-      setPlaces(response.data);
-    });
+    try {
+      const fetchData = async () => {
+        const response = await axios.get('/places');
+        setPlaces(response.data);
+      };
+      fetchData();
+    } catch (error) {
+      setRedirect(`/error`);
+    }
   }, []);
+
+  if (redirect) {
+    return <Navigate to={redirect} />;
+  }
 
   return (
     <div className='mt-8 grid gap-x-6 gap-y-8 grid-cols-2 md:grid-cols-3 lg:grid-cols-3'>

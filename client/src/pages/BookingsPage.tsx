@@ -3,7 +3,7 @@ import AccountNav from '../components/AccountNav';
 import axios from 'axios';
 import { PlacesType } from '../assets/types';
 import PlaceImage from '../components/PlaceImage';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import BookingDates from '../components/BookingDates';
 import { useWidth } from '../hooks/useWidth';
 
@@ -20,12 +20,24 @@ export interface BookingProps {
 const BookingsPage = () => {
   const [bookings, setBookings] = useState<BookingProps[]>([]);
   const windowSize = useWidth();
+  const [redirect, setRedirect] = useState('');
 
   useEffect(() => {
-    axios.get('/bookings').then((response) => {
-      setBookings(response.data);
-    });
+    const fetchBookings = async () => {
+      try {
+        const response = await axios.get('/bookings');
+        setBookings(response.data);
+      } catch (error) {
+        setRedirect(`/error`);
+      }
+    };
+
+    fetchBookings();
   }, []);
+
+  if (redirect) {
+    return <Navigate to={redirect} />;
+  }
 
   return (
     <div>

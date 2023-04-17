@@ -1,18 +1,28 @@
 import AccountNav from '../components/AccountNav';
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { PlacesType } from '../assets/types';
 import PlaceImage from '../components/PlaceImage';
 
 const PlacesPage = () => {
   const [places, setPlaces] = useState<PlacesType[]>([]);
+  const [redirect, setRedirect] = useState('');
 
   useEffect(() => {
-    axios.get('/user-places').then(({ data }) => {
-      setPlaces(data);
-    });
+    try {
+      axios.get('/user-places').then(({ data }) => {
+        setPlaces(data);
+      });
+    } catch (error) {
+      console.error(error);
+      setRedirect('/error');
+    }
   }, []);
+
+  if (redirect) {
+    return <Navigate to={redirect} />;
+  }
 
   return (
     <div>
