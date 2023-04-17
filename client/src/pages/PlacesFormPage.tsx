@@ -54,10 +54,10 @@ const PlacesFormPage = () => {
         setInitialValues({
           title: data.title,
           address: data.address,
-          photos: [],
-          description: '',
-          perks: [],
-          extraInfo: '',
+          photos: data.photos,
+          description: data.description,
+          perks: data.perks,
+          extraInfo: data.extraInfo,
           checkIn: data.checkIn,
           checkOut: data.checkOut,
           maxGuests: data.maxGuests,
@@ -72,7 +72,6 @@ const PlacesFormPage = () => {
 
   const savePlace = async (ev: any) => {
     //  ev.preventDefault();
-
     const placeData = {
       title,
       address,
@@ -129,6 +128,7 @@ const PlacesFormPage = () => {
     <div>
       <AccountNav />
       <Formik
+        enableReinitialize
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={savePlace}>
@@ -147,7 +147,7 @@ const PlacesFormPage = () => {
               title='Title'
               placeholder='Title'
               description='Title for your place'
-              value={title}
+              value={values.title}
               onChange={(val) => {
                 setTitle(val);
                 setFieldValue('title', val);
@@ -165,7 +165,7 @@ const PlacesFormPage = () => {
               title='Address'
               placeholder='Address'
               description='Address for your place'
-              value={address}
+              value={values.address}
               onChange={(val) => {
                 setAddress(val);
                 setFieldValue('address', val);
@@ -213,7 +213,7 @@ const PlacesFormPage = () => {
                 title='Check in time'
                 placeholder='after 15:00'
                 description='Check in time for your place'
-                value={checkIn}
+                value={values.checkIn}
                 onChange={(val) => {
                   setCheckIn(val);
                   setFieldValue('checkIn', val);
@@ -232,7 +232,7 @@ const PlacesFormPage = () => {
                 title='Check out time'
                 placeholder='until 11:00'
                 description='Check out time for your place'
-                value={checkOut}
+                value={values.checkOut}
                 onChange={(val) => {
                   setCheckOut(val);
                   setFieldValue('checkOut', val);
@@ -251,7 +251,7 @@ const PlacesFormPage = () => {
                 type='text'
                 title='Max number of guests'
                 description='Introduce your number of guests'
-                value={maxGuests}
+                value={values.maxGuests}
                 onChange={(val) => {
                   setMaxGuests(val);
                   setFieldValue('maxGuests', val);
@@ -270,7 +270,7 @@ const PlacesFormPage = () => {
                 type='text'
                 title='Price per night'
                 description='Your price per night'
-                value={price}
+                value={values.price}
                 onChange={(val) => {
                   setPrice(val);
                   setFieldValue('price', val);
