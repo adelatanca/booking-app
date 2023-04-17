@@ -16,10 +16,8 @@ export const UserContextProvider = ({
       axios.get('/profile').then(({ data }) => {
         setUser(data);
         setReady(true);
-        console.log('data ', data);
       });
     }
-    console.log('ready ', ready);
   }, []);
 
   return (

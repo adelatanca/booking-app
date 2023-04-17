@@ -3,10 +3,10 @@ import { NumericFormat } from 'react-number-format';
 
 export interface TextInputProps {
   id: string;
-  type: 'numeric' | 'text' | 'number';
+  type?: 'numeric' | 'text' | 'number';
   title: string;
   description?: string;
-  value: string | number | undefined;
+  value?: string | number | undefined;
   onChange: (val: string) => unknown;
   onBlur?: React.FocusEventHandler<HTMLInputElement>;
   onFocus?: React.FocusEventHandler<HTMLInputElement>;

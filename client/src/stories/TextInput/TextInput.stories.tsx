@@ -19,6 +19,8 @@ Primary.args = {
   id: 'address',
   title: 'Address',
   description: 'Address is here',
+  type: 'text',
+  onChange: () => console.log('test'),
 };
 
 export const Secondary = Template.bind({});
@@ -26,4 +28,6 @@ Secondary.args = {
   id: 'ideas',
   title: 'Ideas',
   description: 'Your ideas here',
+  type: 'text',
+  onChange: () => console.log('test'),
 };
