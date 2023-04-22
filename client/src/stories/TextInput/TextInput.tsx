@@ -4,7 +4,7 @@ import { NumericFormat } from 'react-number-format';
 export interface TextInputProps {
   id: string;
   type?: 'numeric' | 'text' | 'number';
-  title: string;
+  title?: string;
   description?: string;
   value?: string | number | undefined;
   onChange: (val: string) => unknown;

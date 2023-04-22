@@ -56,7 +56,9 @@ const BookingPage = () => {
             </div>
             <div className='bg-primary p-6 text-white rounded-2xl'>
               <div>Total price</div>
-              <div className='text-3xl'>${booking.price.toString()}</div>
+              <div className='text-3xl'>
+                ${booking.price.toFixed(2).toString()}
+              </div>
             </div>
           </div>
           <PlaceGallery place={booking.place} />
@@ -74,7 +76,9 @@ const BookingPage = () => {
             </div>
             <div className='text-center mt-4 bg-primary p-2 text-white rounded-2xl '>
               <div className='text-xl'>Total price</div>
-              <div className='text-xl'>${booking.price.toString()}</div>
+              <div className='text-xl'>
+                ${booking.price.toFixed(2).toString()}
+              </div>
             </div>
           </div>
           <PlaceGallery place={booking.place} />

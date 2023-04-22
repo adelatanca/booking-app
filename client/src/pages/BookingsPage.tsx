@@ -75,7 +75,7 @@ const BookingsPage = () => {
                           />
                         </svg>
                         <span className='text-2xl'>
-                          Total price: ${booking.price.toString()}
+                          Total price: ${booking.price.toFixed(2).toString()}
                         </span>
                       </div>
                     </div>
@@ -111,7 +111,7 @@ const BookingsPage = () => {
                           />
                         </svg>
                         <span className='text-xl'>
-                          Total price: ${booking.price.toString()}
+                          Total price: ${booking.price.toFixed(2).toString()}
                         </span>
                       </div>
                     </div>

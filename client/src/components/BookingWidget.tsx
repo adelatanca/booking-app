@@ -5,6 +5,9 @@ import axios from 'axios';
 import { Navigate } from 'react-router-dom';
 import { UserContext } from '../UserContext';
 import { UserContextType } from '../assets/types';
+import { Formik, Form } from 'formik';
+import * as Yup from 'yup';
+import { TextInput } from '../stories/TextInput/TextInput';
 
 const BookingWidget = ({ place }: { place: PlaceProps }) => {
   const [checkIn, setCheckIn] = useState('');
@@ -15,6 +18,17 @@ const BookingWidget = ({ place }: { place: PlaceProps }) => {
   const [redirect, setRedirect] = useState('');
 
   const { user } = useContext(UserContext) as UserContextType;
+
+  const initialValues = {
+    phone_number: '',
+  };
+
+  const validationSchema = Yup.object().shape({
+    phone_number: Yup.string()
+      .max(10, 'Max length 10 digits')
+      .matches(/^07\d{8}$/, 'Introduce a RO phone number')
+      .required('Mobile number is required'),
+  });
 
   useEffect(() => {
     if (user) {
@@ -89,19 +103,52 @@ const BookingWidget = ({ place }: { place: PlaceProps }) => {
               value={name}
               onChange={(ev) => setName(ev.target.value)}
             />
-            <label>Phone number:</label>
-            <input
-              type='number'
-              value={phone}
-              onChange={(ev) => setPhone(Number(ev.target.value))}
-            />
+            <Formik
+              enableReinitialize
+              initialValues={initialValues}
+              validationSchema={validationSchema}
+              onSubmit={bookThisPlace}>
+              {({
+                values,
+                errors,
+                touched,
+                setTouched,
+                setFieldValue,
+                handleSubmit,
+              }) => (
+                <Form onSubmit={handleSubmit}>
+                  <TextInput
+                    id='mobile-input'
+                    type='text'
+                    placeholder='Phone number'
+                    description='Phone number'
+                    value={values.phone_number}
+                    onChange={(val) => {
+                      setPhone(val);
+                      setFieldValue('phone_number', val);
+                    }}
+                    onBlur={() =>
+                      setTouched({ ...touched, phone_number: true })
+                    }
+                    onFocus={() =>
+                      !errors.phone_number &&
+                      setTouched({ ...touched, phone_number: false })
+                    }
+                    error={touched.phone_number && !!errors.phone_number}
+                    errorMessage={errors.phone_number}
+                  />
+                  <button onClick={bookThisPlace} className='primary mt-4'>
+                    Book this place{' '}
+                    {numberOfNights > 0 && (
+                      <span> ${(numberOfNights * place.price).toFixed(2)}</span>
+                    )}
+                  </button>
+                </Form>
+              )}
+            </Formik>
           </div>
         )}
       </div>
-      <button onClick={bookThisPlace} className='primary mt-4'>
-        Book this place{' '}
-        {numberOfNights > 0 && <span> ${numberOfNights * place.price}</span>}
-      </button>
     </div>
   );
 };
