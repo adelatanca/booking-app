@@ -3,6 +3,13 @@ import mongoose from 'mongoose';
 import * as dotenv from 'dotenv';
 dotenv.config({ path: __dirname + '/.env' });
 import cors from 'cors';
+import fs from 'fs';
+import bodyParser from 'body-parser';
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import cookieParser from 'cookie-parser';
+import imageDownloader from 'image-downloader';
+import multer from 'multer';
 
 mongoose.set('strictQuery', false);
 
@@ -13,18 +20,11 @@ export interface UserDataProps {
   iat: Number;
 }
 
-const bodyParser = require('body-parser');
+const MONGO_URL = process.env.MONGO_URL;
 const User = require('./models/User.ts');
 const Place = require('./models/Place.ts');
 const Booking = require('./models/Booking.ts');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const MONGO_URL = process.env.MONGO_URL;
 
-const cookieParser = require('cookie-parser');
-const imageDownloader = require('image-downloader');
-const multer = require('multer');
-const fs = require('fs');
 const app = express();
 const bcryptSalt = bcrypt.genSaltSync(10);
 const jwtSecret = 'ade3403040sajdjsa0303';
@@ -218,6 +218,7 @@ app.get('/user-places', (req: Request, res: Response) => {
 
   try {
     jwt.verify(token, jwtSecret, {}, async (err, userData) => {
+      console.log(userData);
       const { id } = userData;
       res.json(await Place.find({ owner: id }));
     });

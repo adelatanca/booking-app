@@ -23,11 +23,10 @@ export const UserContextProvider = ({
       axios.get('/places').then(({ data }) => {
         setPlaces(data);
       });
-
-      axios.get('/bookings').then(({ data }) => {
-        setBookings(data);
-      });
     }
+    // axios.get('/bookings').then(({ data }) => {
+    //   setBookings(data);
+    // });
   }, []);
 
   return (

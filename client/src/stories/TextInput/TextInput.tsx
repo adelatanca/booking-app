@@ -3,7 +3,7 @@ import { NumericFormat } from 'react-number-format';
 
 export interface TextInputProps {
   id: string;
-  type?: 'numeric' | 'text' | 'number';
+  type?:  'text' | 'number';
   title?: string;
   description?: string;
   value?: string | number | undefined;
